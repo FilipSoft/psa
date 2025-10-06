@@ -8,7 +8,7 @@ class LP():
         self._duration = duration
 
     def __str__(self):
-        out = "| {1:^4} | {0:^20} | {2:^20} | {3:^3} |".format(self._name, self._release_date, self._artist, self._duration)
+        out = "| {1:^4} | {0:^20} | {2:^20} | {3:^8} |".format(self._name, self._release_date, self._artist, self._duration)
         return out
 
 class Library():
@@ -33,12 +33,18 @@ class Library():
         self.add_LP(LP("Banditi di prag", 2009, "KABAT", 90))
 
     def __str__(self):
-        out =  "|---------------------------------------------------------------|\n"
-        out += "| YEAR |         NAME         |        ARTIST        | DURATION |\n"
-        out += "|---------------------------------------------------------------|\n"
+        out =  "|{}|\n".format("-"*70);
+        out += "|  ID  | YEAR |         NAME         |        ARTIST        | DURATION |\n"
+        out += "|{}|\n".format("-"*70);
+        i = 0
         for lp in self._library:
-            out += str(lp) + "\n"
+            out += "| {0:^4} {1}\n".format(i,str(lp));
+            i+=1
+        out += "|{}|\n".format("-"*70);
         return out
+
+    def delete_LP_index(self, i):
+        self._library.pop(i)
 
 def main():
     library = Library();
@@ -65,7 +71,15 @@ def main():
             library.add_LP(lp)
             continue
         elif (choice[0] == "2"):
-            pass
+            library.print_library()
+            i = input("enter ID to delete: ")
+            try:
+                index = int(i)
+                library.delete_LP_index(index)
+            except ValueError:
+                input("ERROR: Invalid ID")
+            except IndexError:
+                input("ERROR: ID is out of range")
         elif (choice[0] == "3"):
             library.clean_library()
             continue
